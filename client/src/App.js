@@ -2,6 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
+function rewardsResults(incomingData) {
+  // Calculate points per transaction
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = new Date(transaction.transactionDt).getMonth();
+    return {...transaction, points, month};
+  };
+
+
 function App() {
 
   const [customerData, setCustomerData] = useState([]);
@@ -65,7 +74,7 @@ function App() {
     <div>
     </div>
   );
+  
 }
 
 export default App;
-
