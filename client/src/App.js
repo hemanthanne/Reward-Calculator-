@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ReactTable from 'react-table';
 import './App.css';
 
 function rewardsResults(incomingData) {
