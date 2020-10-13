@@ -14,6 +14,113 @@ function rewardsResults(incomingData) {
 function App() {
 
   const [customerData, setCustomerData] = useState([]);
+  
+
+  const columns = [
+    {
+      Header:'Customer',
+      accessor: 'name'      
+    },    
+    {
+      Header:'Month',
+      accessor: 'month'
+    },
+    {
+      Header: "No of Transactions",
+      accessor: 'numTransactions'
+    },
+    {
+      Header:'Reward Points',
+      accessor: 'points'
+    }
+  ];
+  const totalsByColumns = [
+    {
+      Header:'Customer',
+      accessor: 'name'      
+    },    
+    {
+      Header:'Points',
+      accessor: 'points'
+    }
+  ]
+
+  function getCustomerTransactions(row) {
+    let byCustomerMonth = _.filter(customerData.pointsPerTransaction, (tRow)=>{    
+      return row.original.custid === tRow.custid && row.original.monthNumber === tRow.month;
+    });
+    return byCustomerMonth;
+  }
+
+  useEffect(() => { 
+    fetch().then((data)=> {             
+      const results = calculateCustomerResults(data);      
+      setCustomerData(results);
+    });
+  },[]);
+
+  if (customerData == null) {
+    return <div>Loading...</div>;   
+  }
+
+  return customerData == null ?
+    <div>Loading...</div> 
+      :    
+    <div>      
+      
+      <div className="container">
+        <div className="row">
+          <div className="col-10">
+            <h2>Cusomer Monthly Points Rewards System</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-8">
+            <ReactTable
+              data={customerData.summaryByCustomer}
+              defaultPageSize={5}
+              columns={columns}
+              SubComponent={row => {
+                return (
+                  <div>
+                    
+                      {getCustomerTransactions(row).map(tran=>{
+                        return <div className="container">
+                          <div className="row">
+                            <div className="col-8">
+                              <strong>Transaction Date:</strong> {tran.transactionDt} - <strong>Points: </strong>{tran.points}
+                            </div>
+                          </div>
+                        </div>
+                      })}                                    
+
+                  </div>
+                )
+              }}
+              />             
+            </div>
+          </div>
+        </div>
+        
+        <div className="container">    
+          <div className="row">
+            <div className="col-10">
+              <h2>Points Rewards System Totals By Customer</h2>
+            </div>
+          </div>      
+          <div className="row">
+            <div className="col-8">
+              <ReactTable
+                data={customerData}
+                columns={totalsByColumns}
+                defaultPageSize={3}                
+              />
+            </div>
+          </div>
+        </div>      
+    </div>
+  ;
+}
 
   useEffect(() => {
     axios.get("http://localhost:3001/api/transaction", {
@@ -74,7 +181,5 @@ function App() {
     <div>
     </div>
   );
-  
-}
 
 export default App;
