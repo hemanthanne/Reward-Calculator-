@@ -71,15 +71,15 @@ function App() {
       
       <div className="container">
         <div className="row">
-          <div className="col-10">
+          <div className="col-8">
             <h2>Cusomer Monthly Points Rewards System</h2>
           </div>
         </div>
         <div className="row">
-          <div className="col-8">
+          <div className="col-6">
             <ReactTable
               data={customerData.summaryByCustomer}
-              defaultPageSize={5}
+              defaultPageSize={3}
               columns={columns}
               SubComponent={row => {
                 return (
